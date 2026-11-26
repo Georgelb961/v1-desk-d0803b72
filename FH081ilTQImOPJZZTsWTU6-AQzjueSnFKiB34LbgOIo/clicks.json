@@ -1,1 +1,1 @@
-{"clicks": []}
+{"clicks": [{"id": 30, "ts": 1795731453, "mint": "DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump", "side": "buy", "usd": 2.0, "pct": 100.0, "status": "failed", "reason": "PAPER smoke quote", "screen_ok": null, "api_ok": null, "chain_ok": null, "error": "no quote", "shot_path": null, "checks": {"screen": false, "api": false, "chain": false}, "link": "https://fomo.family/coin?address=DtcicPCKTKeAh7TDEzTym3hXeoHAoMiBdYJhMYxZpump&chainId=1399811149&r=savipww&source=share_link"}]}

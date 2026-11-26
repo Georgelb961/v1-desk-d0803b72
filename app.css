@@ -13,4 +13,6 @@ canvas{width:100%;height:auto;display:block}
 #tabs button.on{color:var(--green)}
 #panel{min-height:120px}
 .bot{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line)}
+.fomo{display:inline-block;color:#64d2ff;text-decoration:none;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:12px}
+.fomo.off{color:#666;pointer-events:none}
 .scan{color:#64d2ff}.ana{color:#ffd60a}.brain{color:#bf5af2}.exe{color:#00d35a}.risk{color:#ff6b9a}

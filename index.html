@@ -5,39 +5,192 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <title>V1 Desk</title>
 <link rel="stylesheet" href="app.css">
 </head>
-<body>
+<body class="loading">
 <header id="top">
-  <div><span class="dot" id="dot"></span><span id="mode">PAPER</span></div>
-  <div id="cash">$0</div>
+  <button type="button" id="avatar" class="icon" aria-label="Account">G</button>
+  <div id="title">V1 Desk</div>
+  <button type="button" id="searchBtn" class="icon" aria-label="Search">⌕</button>
+  <button type="button" id="bellBtn" class="icon" aria-label="Activity">♪</button>
 </header>
+
+<div id="errorRow" class="errorRow" hidden>
+  <span id="errorText">Desk offline</span>
+  <span id="retryCount">retrying in 5s</span>
+  <span id="lastUpdate">last update —</span>
+</div>
+
 <section class="card" id="gate" hidden>
   <label for="deskLink">Paste your desk link</label>
   <input id="deskLink" type="text" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="one-time link from Telegram">
   <button id="saveLink" type="button">Save</button>
   <div class="gate-note">Saved only in this browser's localStorage.</div>
 </section>
-<main>
-  <section class="card" id="live">
-    <div class="row"><b>Live</b><span id="lane">Idle</span></div>
-    <canvas id="chart" width="700" height="360"></canvas>
-    <div class="row"><span id="lastOrder">No orders yet</span></div>
-    <img id="screen" alt="Live screen" hidden>
+
+<main id="main">
+  <section id="homeView" class="view on">
+    <section class="hero">
+      <div class="balanceLine">
+        <div>
+          <div class="label">Balance</div>
+          <div id="balanceText" class="balance">$0</div>
+        </div>
+        <span id="paperBadge" class="badge paper">PAPER</span>
+      </div>
+      <div class="statLine">
+        <span id="todayPct" class="change">+0.00%</span>
+        <span id="multiplier" class="pill green">1.0000x</span>
+        <span id="marketPill" class="pill grey">Quiet</span>
+      </div>
+      <div class="skeleton sk-balance"></div>
+    </section>
+
+    <section class="card chartCard">
+      <div class="cardHead">
+        <span>Equity</span>
+        <div id="ranges" class="ranges">
+          <button type="button" data-range="LIVE" class="on">LIVE</button>
+          <button type="button" data-range="1H">1H</button>
+          <button type="button" data-range="4H">4H</button>
+          <button type="button" data-range="1D">1D</button>
+          <button type="button" data-range="1W">1W</button>
+          <button type="button" data-range="ALL">ALL</button>
+        </div>
+      </div>
+      <canvas id="chart"></canvas>
+      <div id="chartEmpty" class="empty" hidden>Waiting for the first trade</div>
+      <div class="skeleton sk-chart"></div>
+    </section>
+
+    <section class="card screenCard" id="screenCard">
+      <div class="cardHead"><span>Live screen</span><span id="lane">Idle</span></div>
+      <div class="frameWrap">
+        <img id="screen" alt="Bot computer">
+        <div class="frameOverlay">
+          <span><i id="frameDot" class="dot off"></i><span id="frameState">Last frame —</span></span>
+        </div>
+      </div>
+      <div id="lastOrder" class="orderLine">No orders yet</div>
+      <button type="button" id="openScreenFomo" class="linkBtn" disabled>Open on FOMO</button>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><span>Activity</span><button type="button" id="seeAll" class="plainBtn">See all</button></div>
+      <div id="activityPreview"><div class="skeleton sk-row"></div><div class="skeleton sk-row"></div></div>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><span>Bots</span><span>5 running</span></div>
+      <div id="botCarousel" class="carousel"><div class="skeleton sk-bot"></div></div>
+    </section>
   </section>
-  <nav id="tabs">
-    <button data-tab="bots" class="on">Bots</button>
-    <button data-tab="activity">Activity</button>
-    <button data-tab="coin">Coin</button>
-    <button data-tab="audit">Audit</button>
-    <button data-tab="account">Account</button>
-  </nav>
-  <section id="panel">Loading…</section>
+
+  <section id="botsView" class="view">
+    <div class="viewHead"><h1>Bots</h1><p>Five desks, one click lane.</p></div>
+    <div id="botDetail"><div class="skeleton sk-row"></div></div>
+  </section>
+
+  <section id="activityView" class="view">
+    <div class="viewHead"><h1>Activity</h1><p>Tonight's decisions.</p></div>
+    <div id="activityList"><div class="skeleton sk-row"></div></div>
+  </section>
+
+  <section id="accountView" class="view">
+    <div class="viewHead"><h1>Account</h1><p id="handleLine">georgeslb</p></div>
+
+    <section class="card">
+      <div class="cardHead"><span>Mode</span><span id="modeValue">PAPER</span></div>
+      <div class="segmented">
+        <button type="button" id="paperBtn" class="on">PAPER</button>
+        <button type="button" id="liveBtn">LIVE</button>
+      </div>
+      <div id="liveBox" class="inlineForm" hidden>
+        <input id="liveInput" type="text" autocomplete="off" autocapitalize="off" placeholder="type LIVE">
+        <button type="button" id="liveConfirm">Confirm</button>
+      </div>
+      <label class="fieldLabel" for="cashField">Cash</label>
+      <input id="cashField" class="cashField" type="text" readonly>
+      <p class="hint">Owner deposits themselves before LIVE.</p>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><span>Your FOMO profile</span></div>
+      <a id="profileLink" class="linkBtn" href="#" target="_blank" rel="noopener noreferrer">Open profile</a>
+      <button type="button" id="inviteBtn" class="linkBtn">Invite a friend</button>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><span>Copy picks</span></div>
+      <div class="inlineForm">
+        <select id="picksSelect">
+          <option value="off">off</option>
+          <option value="24h">every 24h</option>
+          <option value="12h">every 12h</option>
+          <option value="6h">every 6h</option>
+        </select>
+        <input id="picksTime" type="time" value="00:00">
+      </div>
+      <p class="hint">Ask the desk to change this setting; this screen never writes by itself.</p>
+    </section>
+
+    <section class="card">
+      <div class="cardHead"><span>Settings</span><button type="button" id="settingsShortcut" class="plainBtn">Per bot</button></div>
+      <div id="settingsList"></div>
+    </section>
+
+    <section class="card">
+      <div id="vaultValue">Vault: files • Android phone</div>
+      <div id="pushState">Push: Telegram • not checked</div>
+      <div id="webPushState">Web push: Telegram only</div>
+      <button type="button" id="testPushBtn" class="linkBtn">Send test push</button>
+      <button type="button" id="enableNotifBtn" class="linkBtn" hidden>Enable notifications</button>
+      <button type="button" id="previewBtn" class="linkBtn">Watch on computer</button>
+    </section>
+  </section>
 </main>
+
+<nav id="tabs">
+  <button type="button" data-tab="home" class="on">Home</button>
+  <button type="button" data-tab="bots">Bots</button>
+  <button type="button" data-tab="activity">Activity</button>
+  <button type="button" data-tab="account">Account</button>
+</nav>
+
+<div id="detail" class="sheet" hidden>
+  <div class="sheetBar"><button type="button" id="detailBack" class="plainBtn">‹ Back</button><span id="detailTitle">Coin</span><span id="detailBadge" class="badge paper" hidden>PAPER</span></div>
+  <div id="detailBody"></div>
+</div>
+
+<div id="searchSheet" class="sheet" hidden>
+  <div class="sheetBar"><button type="button" id="searchClose" class="plainBtn">‹ Back</button><span>Search</span></div>
+  <input id="searchInput" class="searchInput" type="search" placeholder="name, symbol or mint" autocomplete="off">
+  <div id="searchResults"></div>
+</div>
+
+<div id="fullScreen" class="sheet full" hidden>
+  <div class="sheetBar"><button type="button" id="fullClose" class="plainBtn">‹ Close</button><span>Full screen</span></div>
+  <img id="fullImg" alt="Bot computer full screen">
+  <button type="button" id="fullOpenFomo" class="linkBtn" disabled>Open on FOMO</button>
+</div>
+
+<div id="sellSheet" class="sheet" hidden>
+  <div class="sheetBar"><button type="button" id="sellClose" class="plainBtn">‹ Back</button><span id="sellTitle">Sell now</span></div>
+  <p class="hint">The desk clicks the sell on FOMO. This phone only queues the order.</p>
+  <div id="sellChoices" class="segmented">
+    <button type="button" data-pct="25">25%</button>
+    <button type="button" data-pct="50">50%</button>
+    <button type="button" data-pct="100">100%</button>
+  </div>
+  <button type="button" id="sellConfirm" class="primaryBtn" disabled>Confirm sell</button>
+</div>
+
+<div id="toast" class="toast" hidden></div>
 <script src="chart.js"></script>
 <script src="app.js"></script>
 </body>

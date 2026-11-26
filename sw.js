@@ -1,7 +1,7 @@
 /* Minimal service worker: cache the shell, never cache data JSON/screen.
    Bump VERSION whenever the shell changes so installed phones stop using an
    old cached app.js (which can keep a revoked DATA_PATH forever). */
-const VERSION = 'v1-shell-2';
+const VERSION = 'v1-shell-3';
 const SHELL = ['./', 'index.html', 'app.css', 'app.js', 'chart.js', 'manifest.json', 'icons/apple-touch-icon.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));

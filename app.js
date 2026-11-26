@@ -4,6 +4,14 @@
     navigator.serviceWorker.register('sw.js').catch(function () {});
   }
   const KEY = 'v1_data_path';
+  const frag = location.hash;
+  if (frag.indexOf('#d=') === 0) {
+    const incoming = decodeURIComponent(frag.slice(3));
+    if (incoming.indexOf('https://') === 0) {
+      localStorage.setItem(KEY, incoming.replace(/\/$/, ''));
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+  }
   let base = localStorage.getItem(KEY) || '';
   if (!base) {
     const p = prompt('Paste your desk link (DATA_PATH)');

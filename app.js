@@ -692,7 +692,7 @@
     });
 
     $('paperBtn').addEventListener('click', function () {
-      toast('Already PAPER. LIVE stays locked until STEP 15.');
+      toast('Already PAPER. LIVE needs STEP 15 PASS, 1 full PAPER night and the word LIVE.');
     });
     $('liveBtn').addEventListener('click', function () { $('liveBox').hidden = false; });
     $('liveConfirm').addEventListener('click', async function () {

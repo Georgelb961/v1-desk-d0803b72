@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>V1 Desk</title>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header id="top">
+  <div><span class="dot" id="dot"></span><span id="mode">PAPER</span></div>
+  <div id="cash">$0</div>
+</header>
+<main>
+  <section class="card" id="live">
+    <div class="row"><b>Live</b><span id="lane">Idle</span></div>
+    <canvas id="chart" width="700" height="360"></canvas>
+    <div class="row"><span id="lastOrder">No orders yet</span></div>
+    <img id="screen" alt="Live screen" hidden>
+  </section>
+  <nav id="tabs">
+    <button data-tab="bots" class="on">Bots</button>
+    <button data-tab="activity">Activity</button>
+    <button data-tab="coin">Coin</button>
+    <button data-tab="audit">Audit</button>
+    <button data-tab="account">Account</button>
+  </nav>
+  <section id="panel">Loading…</section>
+</main>
+<script src="chart.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

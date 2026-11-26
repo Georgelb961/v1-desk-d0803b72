@@ -12,6 +12,7 @@
   var gate = document.getElementById('gate');
   var input = document.getElementById('deskLink');
   var button = document.getElementById('saveLink');
+  var started = false;
 
   function clearHash() {
     history.replaceState(null, '', location.pathname + location.search);
@@ -81,6 +82,8 @@
   start();
 
   function start() {
+    if (started) return;
+    started = true;
     var base = localStorage.getItem(DATA_KEY) || '';
 
     async function get(name) {
@@ -206,15 +209,22 @@
         document.querySelectorAll('#tabs button').forEach(function (x) {
           x.classList.toggle('on', x === b);
         });
-        get('state').then(function (s) { render(tab, s); }).catch(function () {});
+        get('state').then(function (s) { render(tab, s); }).catch(fail);
       });
     });
 
+    function fail() {
+      document.getElementById('dot').className = 'dot off';
+      var panel = document.getElementById('panel');
+      if (!panel.children.length) {
+        ask();
+        input.placeholder = 'Saved link did not load - paste the newest one-time link';
+      }
+    }
+
     setInterval(function () {
-      get('state').then(function (s) { render(tab, s); }).catch(function () {
-        document.getElementById('dot').className = 'dot off';
-      });
+      get('state').then(function (s) { render(tab, s); }).catch(fail);
     }, 5000);
-    get('state').then(function (s) { render(tab, s); }).catch(function () {});
+    get('state').then(function (s) { render(tab, s); }).catch(fail);
   }
 })();

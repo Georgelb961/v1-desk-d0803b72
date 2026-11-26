@@ -145,6 +145,15 @@
     </section>
 
     <section class="card">
+      <div class="cardHead"><span>Talk to the desk</span><span>Telegram or here</span></div>
+      <div class="inlineForm">
+        <input id="commandInput" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="status, why X, sell X 50, help">
+        <button type="button" id="commandSend">Send</button>
+      </div>
+      <div id="commandReplies" class="hint" aria-live="polite">Commands work when the desk API is reachable from this device.</div>
+    </section>
+
+    <section class="card">
       <div id="vaultValue">Vault: files • Android phone</div>
       <div id="pushState">Push: Telegram • not checked</div>
       <div id="webPushState">Web push: Telegram only</div>

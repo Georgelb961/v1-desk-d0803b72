@@ -738,6 +738,23 @@
       toast('Desk preview: dedicated Chrome on 127.0.0.1:9223');
     });
 
+    async function sendCommand() {
+      var text = $('commandInput').value.trim();
+      if (!text) return;
+      var box = $('commandReplies');
+      box.textContent = 'Asking the desk…';
+      try {
+        var result = await api('/api/command', {text: text});
+        box.textContent = (result.replies || []).join('\n') || 'No reply';
+      } catch (e) {
+        box.textContent = 'Desk API unreachable from here. Use Telegram instead. ' + e.message;
+      }
+    }
+    $('commandSend').addEventListener('click', sendCommand);
+    $('commandInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') sendCommand();
+    });
+
     document.querySelectorAll('#sellChoices button').forEach(function (b) {
       b.addEventListener('click', function () {
         sellPct = Number(b.dataset.pct || 0);

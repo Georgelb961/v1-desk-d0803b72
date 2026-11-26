@@ -84,6 +84,7 @@ a { color: var(--cyan); }
 .primaryBtn:disabled { background: var(--card2); color: var(--tertiary); }
 .label { color: var(--secondary); font-size: 13px; }
 .hint { color: var(--tertiary); font-size: 12px; margin: 6px 0 0; }
+#commandReplies { white-space: pre-wrap; color: var(--secondary); margin-top: 10px; }
 .empty { color: var(--tertiary); font-size: 13px; padding: 16px 4px; text-align: center; }
 
 .hero { padding: 10px 2px 16px; }

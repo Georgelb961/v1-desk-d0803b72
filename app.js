@@ -154,7 +154,11 @@
       if (!ts) return '—';
       var d = new Date(Number(ts) * 1000);
       if (isNaN(d.getTime())) return '—';
-      return d.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit', second: '2-digit'});
+      var h = d.getHours();
+      var suffix = h >= 12 ? 'PM' : 'AM';
+      h = h % 12 || 12;
+      return String(h).padStart(2, '0') + ':' +
+        String(d.getMinutes()).padStart(2, '0') + ' ' + suffix;
     }
 
     function toast(text) {
